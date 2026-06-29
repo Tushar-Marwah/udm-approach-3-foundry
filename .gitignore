@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+*.db
+backend/*.db
+data/registry.db
+data/uploads/
+.venv/
+venv/
+.DS_Store
+cloudflared*

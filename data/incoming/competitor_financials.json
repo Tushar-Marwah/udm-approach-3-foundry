@@ -1,0 +1,8 @@
+{
+  "source": "BSE filings + investor decks, FY26",
+  "companies": [
+    {"Company": "Bisleri", "Category": "packaged water", "Mkt Share %": 32, "Gross Margin %": 41, "R&D % of rev": 1.2, "Patents": 14, "ESG score": 0.62},
+    {"Company": "Kinley", "Category": "packaged water", "Mkt Share %": 18, "Gross Margin %": 38, "R&D % of rev": 0.9, "Patents": 6, "ESG score": 0.55},
+    {"Company": "Aquafina", "Category": "packaged water", "Mkt Share %": 11, "Gross Margin %": 36, "R&D % of rev": 1.0, "Patents": 4, "ESG score": 0.58}
+  ]
+}

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: amplofly-udm
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: MAGICA_API_KEY
+        sync: false          # set this in the Render dashboard (kept secret)

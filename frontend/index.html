@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEL Ontology — Foundry-style demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">AmploFly<b>4.0</b></span>
+    <span class="module-tag">Unified Data Model</span>
+  </div>
+  <div class="topbar-right">
+    <div class="ctx-bar">
+      <select id="ctx-actor" title="Active role"></select>
+      <select id="ctx-branch" title="Active branch"></select>
+      <select id="ctx-workspace" title="Active workspace"></select>
+    </div>
+    <div class="ai-badge">
+      <span class="ai-dot"></span>
+      <div>
+        <div class="ai-title">AmploFly4.0 AI</div>
+        <div id="mode-badge" class="ai-sub">connecting…</div>
+      </div>
+    </div>
+    <button id="reset-btn" class="btn btn-ghost" title="Re-seed the database">Reset demo</button>
+  </div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-group">Platform</div>
+  <button class="tab active" data-tab="overview">Overview</button>
+  <div class="side-group">Data Connection</div>
+  <button class="tab" data-tab="raw">Raw layer</button>
+  <button class="tab" data-tab="documents">Documents</button>
+  <button class="tab" data-tab="ingest">Pipelines / Ingest</button>
+  <div class="side-group">Ontology</div>
+  <button class="tab" data-tab="ontology">Meaning layer</button>
+  <button class="tab" data-tab="governance">Governance</button>
+  <div class="side-group">Tracking</div>
+  <button class="tab" data-tab="companies">Companies</button>
+  <button class="tab" data-tab="projects">Projects</button>
+  <div class="side-group">Operations</div>
+  <button class="tab" data-tab="console">Console</button>
+  <div class="side-group">AIP</div>
+  <button class="tab" data-tab="agent">Agent</button>
+</aside>
+
+<main>
+  <!-- OVERVIEW -->
+  <section id="overview" class="panel active">
+
+    <!-- narrated explainer "video" -->
+    <div class="hero-player">
+      <div class="hp-head">
+        <div>
+          <div class="hp-kicker">▶ Animated walkthrough</div>
+          <h2 class="hp-title">How the data model works — in about a minute</h2>
+        </div>
+        <div class="hp-controls">
+          <button id="hp-play" class="btn btn-primary">▶ Play walkthrough</button>
+          <span class="hp-counter" id="hp-counter">tap play</span>
+        </div>
+      </div>
+
+      <div class="scene-wrap">
+        <svg id="sg" class="scene-svg" viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="Animated walkthrough: a question breaks down into objects, which fetch from raw files, then converge into one answer">
+          <!-- edges: question -> objects -->
+          <line class="sg-edge" id="sg-qo1" x1="480" y1="70" x2="95"  y2="150" pathLength="1"/>
+          <line class="sg-edge" id="sg-qo2" x1="480" y1="70" x2="290" y2="150" pathLength="1"/>
+          <line class="sg-edge" id="sg-qo3" x1="480" y1="70" x2="485" y2="150" pathLength="1"/>
+          <line class="sg-edge" id="sg-qo4" x1="480" y1="70" x2="680" y2="150" pathLength="1"/>
+          <line class="sg-edge" id="sg-qo5" x1="480" y1="70" x2="875" y2="150" pathLength="1"/>
+          <!-- edges: objects -> raw -->
+          <line class="sg-edge" id="sg-or1" x1="95"  y1="194" x2="95"  y2="360" pathLength="1"/>
+          <line class="sg-edge" id="sg-or2" x1="290" y1="194" x2="290" y2="360" pathLength="1"/>
+          <line class="sg-edge" id="sg-or3" x1="485" y1="194" x2="485" y2="360" pathLength="1"/>
+          <line class="sg-edge" id="sg-or4" x1="680" y1="194" x2="680" y2="360" pathLength="1"/>
+          <line class="sg-edge" id="sg-or5" x1="875" y1="194" x2="875" y2="360" pathLength="1"/>
+          <!-- edges: objects -> fuse -->
+          <line class="sg-edge" id="sg-of1" x1="95"  y1="194" x2="480" y2="252" pathLength="1"/>
+          <line class="sg-edge" id="sg-of2" x1="290" y1="194" x2="480" y2="252" pathLength="1"/>
+          <line class="sg-edge" id="sg-of3" x1="485" y1="194" x2="480" y2="252" pathLength="1"/>
+          <line class="sg-edge" id="sg-of4" x1="680" y1="194" x2="480" y2="252" pathLength="1"/>
+          <line class="sg-edge" id="sg-of5" x1="875" y1="194" x2="480" y2="252" pathLength="1"/>
+          <!-- edge: fuse -> answer -->
+          <line class="sg-edge" id="sg-fa" x1="480" y1="298" x2="480" y2="362" pathLength="1"/>
+
+          <!-- value chips -->
+          <text class="sg-chip" id="sg-c1" x="95"  y="234">32% · 45%</text>
+          <text class="sg-chip" id="sg-c2" x="290" y="234">₹20 · ₹18</text>
+          <text class="sg-chip" id="sg-c3" x="485" y="234">TDS 120</text>
+          <text class="sg-chip" id="sg-c4" x="680" y="234">trust 4.4</text>
+          <text class="sg-chip" id="sg-c5" x="875" y="234">“premiumise”</text>
+
+          <!-- raw file nodes -->
+          <g class="sg-node n-raw" id="sg-r1" style="--x:20px;--y:360px"><rect width="150" height="40" rx="9"/><text x="75" y="24">t_financials</text></g>
+          <g class="sg-node n-raw" id="sg-r2" style="--x:215px;--y:360px"><rect width="150" height="40" rx="9"/><text x="75" y="24">t_prices</text></g>
+          <g class="sg-node n-raw" id="sg-r3" style="--x:410px;--y:360px"><rect width="150" height="40" rx="9"/><text x="75" y="24">t_specs</text></g>
+          <g class="sg-node n-raw" id="sg-r4" style="--x:605px;--y:360px"><rect width="150" height="40" rx="9"/><text x="75" y="24">t_attributes</text></g>
+          <g class="sg-node n-raw" id="sg-r5" style="--x:800px;--y:360px"><rect width="150" height="40" rx="9"/><text x="75" y="24">notes store</text></g>
+
+          <!-- object nodes -->
+          <g class="sg-node n-obj" id="sg-o1" style="--x:20px;--y:150px"><rect width="150" height="44" rx="9"/><text x="75" y="27">Brand</text></g>
+          <g class="sg-node n-obj" id="sg-o2" style="--x:215px;--y:150px"><rect width="150" height="44" rx="9"/><text x="75" y="27">PricePoint</text></g>
+          <g class="sg-node n-obj" id="sg-o3" style="--x:410px;--y:150px"><rect width="150" height="44" rx="9"/><text x="75" y="27">Product</text></g>
+          <g class="sg-node n-obj" id="sg-o4" style="--x:605px;--y:150px"><rect width="150" height="44" rx="9"/><text x="75" y="27">Attribute</text></g>
+          <g class="sg-node n-obj" id="sg-o5" style="--x:800px;--y:150px"><rect width="150" height="44" rx="9"/><text x="75" y="27">Narrative</text></g>
+
+          <!-- fuse + answer -->
+          <g class="sg-node n-fuse" id="sg-fuse" style="--x:350px;--y:252px"><rect width="260" height="46" rx="10"/><text x="130" y="28">Fuse + reason</text></g>
+          <g class="sg-node n-ans" id="sg-ans" style="--x:70px;--y:362px"><rect width="820" height="60" rx="12"/><text x="410" y="36">“Bisleri leads at ~32% share &amp; ~45% margin — undercut on the 1L pack by Kinley &amp; Aquafina.”</text></g>
+
+          <!-- the question (on top) -->
+          <g class="sg-node n-q" id="sg-q" style="--x:300px;--y:16px;--cx:300px;--cy:190px"><rect width="360" height="54" rx="12"/><text x="180" y="33">“How is Bisleri positioned vs its peers?”</text></g>
+        </svg>
+      </div>
+
+      <div class="hp-caption-bar">
+        <span class="hp-cap-label" id="hp-cap-label">What's happening</span>
+        <span id="hp-cap-text">Press <b>“Play walkthrough”</b> for a guided, step-by-step animation — or just watch it loop. Each step explains itself as it happens.</span>
+      </div>
+    </div>
+
+    <div class="sec-break"><span>The terms, in one place</span></div>
+
+    <h3 class="glossary-h reveal">Terms glossary <span class="muted">— every word used below, defined once</span></h3>
+    <div class="glossary reveal">
+      <div><b>Raw data</b> — your files, kept exactly as they arrived (messy values and all).</div>
+      <div><b>Object</b> — a business thing you track. A noun: Brand, Product, Company.</div>
+      <div><b>Property</b> — one fact about an object: a price, a margin, a score.</div>
+      <div><b>Pointer (binding)</b> — says <i>where</i> a fact lives in the raw files, plus the rule to clean it.</div>
+      <div><b>Link</b> — a relationship between objects: “competes-with”, “sells”.</div>
+      <div><b>Meaning layer / ontology</b> — the whole map of objects, pointers &amp; links. Holds <i>no</i> data.</div>
+      <div><b>Resolver</b> — the part that turns your question into a database query.</div>
+      <div><b>SQL</b> — the standard language for asking a database for data.</div>
+      <div><b>Narrative store</b> — the written words (strategy, notes), searchable by keyword.</div>
+      <div><b>Agent</b> — the AI that plans the query, fetches the data, and writes the answer.</div>
+    </div>
+
+    <div class="sec-break"><span>Understanding the data model</span></div>
+
+    <h2 class="reveal">Understanding the Unified Data Model</h2>
+    <p class="lede reveal">Same idea as the RAG deck — but for data. One clean flow turns any messy file into a
+      business model an AI can answer from. The whole thing is an <b>ontology</b>
+      <span class="def">— a plain map of the business: the things you track, the facts about them, and how they
+      connect</span>. Four moves: <b>land → map → govern → reason</b>.</p>
+
+    <svg class="flow-svg reveal" viewBox="0 0 980 240" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Data model flow: any file lands as raw tables, is mapped to the ontology, which the resolver queries to answer">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M1 1 L8 5 L1 9" fill="none" stroke="#5a6b82" stroke-width="1.6" stroke-linecap="round"/>
+        </marker>
+        <marker id="art" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M1 1 L8 5 L1 9" fill="none" stroke="#2dd4bf" stroke-width="1.6" stroke-linecap="round"/>
+        </marker>
+      </defs>
+
+      <!-- verb labels -->
+      <text x="232" y="34" class="verb">land</text>
+      <text x="492" y="34" class="verb">map · AI</text>
+      <text x="752" y="34" class="verb">resolve</text>
+
+      <!-- arrows -->
+      <line x1="198" y1="72" x2="266" y2="72" stroke="#4a5a70" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="458" y1="72" x2="526" y2="72" stroke="#4a5a70" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="718" y1="72" x2="786" y2="72" stroke="#4a5a70" stroke-width="2" marker-end="url(#ar)"/>
+
+      <!-- boxes -->
+      <g class="fb">
+        <rect x="8"   y="42" width="190" height="60" rx="10"/>
+        <text x="103" y="68" class="ft">Any file</text>
+        <text x="103" y="88" class="fs">Excel · PDF · CSV · prose</text>
+      </g>
+      <g class="fb">
+        <rect x="268" y="42" width="190" height="60" rx="10"/>
+        <text x="363" y="68" class="ft">Raw tables</text>
+        <text x="363" y="88" class="fs">stored exactly as-is</text>
+      </g>
+      <g class="fb on">
+        <rect x="528" y="42" width="190" height="60" rx="10"/>
+        <text x="623" y="68" class="ft">Ontology</text>
+        <text x="623" y="88" class="fs">objects · properties · links</text>
+      </g>
+      <g class="fb">
+        <rect x="788" y="42" width="184" height="60" rx="10"/>
+        <text x="880" y="68" class="ft">Answer</text>
+        <text x="880" y="88" class="fs">agent · apps · reports</text>
+      </g>
+
+      <!-- "points at" loopback: ontology references raw, copies nothing -->
+      <path d="M623 102 L623 158 L363 158 L363 104" fill="none" stroke="#2dd4bf"
+            stroke-width="1.6" stroke-dasharray="4 4" marker-end="url(#art)"/>
+      <text x="493" y="178" class="verb">points at — no data is copied</text>
+    </svg>
+
+    <div class="moves">
+      <span class="move"><b>① Land</b> any file, untouched</span>
+      <span class="move"><b>② Map</b> columns → business objects</span>
+      <span class="move"><b>③ Govern</b> health · lineage · access</span>
+      <span class="move"><b>④ Reason</b> the agent answers</span>
+    </div>
+
+    <div class="sec-break"><span>The building blocks</span></div>
+
+    <h3 class="reveal">The pieces, in plain terms</h3>
+    <div class="obj-grid concept-grid reveal">
+      <div class="obj-card"><h4>Object</h4><p class="muted">A business <i>thing</i> you care about — <code>Company</code>, <code>Product</code>, <code>PricePoint</code>. Like a noun.</p></div>
+      <div class="obj-card"><h4>Property</h4><p class="muted">A field on an object — and a <b>pointer</b> to a raw column. <code>Product.tds</code> points at <code>t_specs.tds</code>.</p></div>
+      <div class="obj-card"><h4>Binding</h4><p class="muted">The pointer + a clean rule (strip ₹, <code>×10</code> crore→mn). <b>All the intelligence lives here</b>, not in the data.</p></div>
+      <div class="obj-card"><h4>Link</h4><p class="muted">A relationship between objects — <code>Product competesWith Product</code>. The part a flat table can't do.</p></div>
+      <div class="obj-card"><h4>Resolver</h4><p class="muted">Turns a business question into real SQL over the raw tables — on the fly, from the bindings.</p></div>
+      <div class="obj-card"><h4>Raw vs Meaning</h4><p class="muted">Raw data stays raw. The meaning layer holds <b>no data</b> — only pointers. Two layers; that's the trick.</p></div>
+    </div>
+
+    <h3 class="reveal">① Zoom in — what an <i>object</i> really is</h3>
+    <p class="diagram-note reveal">An <b>object</b> is a business thing (a noun) with a set of <b>properties</b>.
+      Each property doesn't <i>store</i> a value — it <b>points</b> at a column in a raw file. The object itself
+      holds no data; it's a clean set of labelled pointers.</p>
+    <svg class="flow-svg diagram-block reveal" viewBox="0 0 980 260" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="The Product object's properties each point at a column in the raw t_specs table">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M1 1 L8 5 L1 9" fill="none" stroke="#5a6b82" stroke-width="1.6" stroke-linecap="round"/></marker></defs>
+      <g class="fb on"><rect x="30" y="34" width="250" height="196" rx="10"/>
+        <text x="155" y="60" class="ft">Object · Product</text>
+        <text x="155" y="78" class="fs">a business thing · holds no data</text>
+        <text x="55" y="118" class="fp">sku</text><text x="55" y="150" class="fp">tds</text>
+        <text x="55" y="182" class="fp">mrp</text><text x="55" y="214" class="fp">certifications</text></g>
+      <g class="fb"><rect x="700" y="34" width="250" height="196" rx="10"/>
+        <text x="825" y="60" class="ft">Raw file · t_specs</text>
+        <text x="825" y="78" class="fs">stored exactly as it arrived</text>
+        <text x="720" y="118" class="fp">product = <tspan class="fpv">BIS-1L</tspan></text>
+        <text x="720" y="150" class="fp">tds = <tspan class="fpv">120</tspan></text>
+        <text x="720" y="182" class="fp">mrp = <tspan class="fpv">20</tspan></text>
+        <text x="720" y="214" class="fp">certs = <tspan class="fpv">BIS, ISI</tspan></text></g>
+      <text x="490" y="106" class="elabel">parse_sku</text>
+      <text x="490" y="138" class="elabel">to_int</text>
+      <text x="490" y="170" class="elabel">to_int</text>
+      <text x="490" y="202" class="elabel">(direct)</text>
+      <line x1="282" y1="114" x2="698" y2="114" class="edge flow" marker-end="url(#ar2)"/>
+      <line x1="282" y1="146" x2="698" y2="146" class="edge flow" marker-end="url(#ar2)"/>
+      <line x1="282" y1="178" x2="698" y2="178" class="edge flow" marker-end="url(#ar2)"/>
+      <line x1="282" y1="210" x2="698" y2="210" class="edge flow" marker-end="url(#ar2)"/>
+      <text x="490" y="250" class="verb">each property is a POINTER to a raw column (with a clean rule)</text>
+    </svg>
+
+    <h3 class="reveal">② What a <i>pointer</i> (binding) is — a contacts list for your data</h3>
+    <p class="diagram-note reveal">You never dial a raw phone number — you tap a name and the phone looks it up.
+      A <b>pointer</b> works the same way: the agent asks for <code>Product.tds</code>; the resolver looks up the
+      pointer and reads the real column. The pointer also carries the <b>clean rule</b> (strip ₹, convert crore→mn)
+      — that's where all the intelligence lives.</p>
+    <svg class="flow-svg diagram-block reveal" viewBox="0 0 980 200" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Contacts-list analogy: tapping a name dials a number; asking an object property reads a raw column">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M1 1 L8 5 L1 9" fill="none" stroke="#2dd4bf" stroke-width="1.6" stroke-linecap="round"/></marker></defs>
+      <text x="20" y="56" class="fs" style="text-anchor:start">Your phone</text>
+      <g class="fb"><rect x="150" y="32" width="240" height="48" rx="9"/><text x="270" y="61" class="fp" style="text-anchor:middle">tap “Mom”</text></g>
+      <g class="fb"><rect x="560" y="32" width="300" height="48" rx="9"/><text x="710" y="61" class="fpv" style="text-anchor:middle">dials +91 98xxx xxxxx</text></g>
+      <text x="475" y="48" class="verb">looks up + dials</text>
+      <line x1="392" y1="56" x2="558" y2="56" class="edge flow" marker-end="url(#ar3)"/>
+      <text x="20" y="146" class="fs" style="text-anchor:start">The ontology</text>
+      <g class="fb on"><rect x="150" y="122" width="240" height="48" rx="9"/><text x="270" y="151" class="fp" style="text-anchor:middle">ask “Product.tds”</text></g>
+      <g class="fb"><rect x="560" y="122" width="300" height="48" rx="9"/><text x="710" y="151" class="fpv" style="text-anchor:middle">reads t_specs.tds = 120</text></g>
+      <text x="475" y="138" class="verb">resolver looks up + reads</text>
+      <line x1="392" y1="146" x2="558" y2="146" class="edge flow" marker-end="url(#ar3)"/>
+    </svg>
+
+    <h3 class="reveal">③ What a <i>link</i> is — relationships a flat table can't hold</h3>
+    <p class="diagram-note reveal">Objects connect to each other through <b>links</b> — <code>Brand sells Product</code>,
+      <code>Product hasPrice PricePoint</code>, <code>Product competesWith Product</code>. This graph is what lets
+      the agent reason relationally (“who competes with Bisleri on 1L?”), which a single flat table cannot.</p>
+    <svg class="flow-svg diagram-block reveal" viewBox="0 0 980 170" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Link graph: Bisleri-1L competesWith Kinley-1L, Bailley-1L and Aquafina-1L">
+      <defs><marker id="ar4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M1 1 L8 5 L1 9" fill="none" stroke="#5a6b82" stroke-width="1.6" stroke-linecap="round"/></marker></defs>
+      <g class="node"><rect x="110" y="62" width="130" height="40" rx="9"/><text x="175" y="87">BIS-1L</text></g>
+      <g class="node"><rect x="560" y="18" width="130" height="40" rx="9"/><text x="625" y="43">KIN-1L</text></g>
+      <g class="node"><rect x="560" y="62" width="130" height="40" rx="9"/><text x="625" y="87">BAI-1L</text></g>
+      <g class="node"><rect x="560" y="106" width="130" height="40" rx="9"/><text x="625" y="131">AQU-1L</text></g>
+      <line x1="240" y1="78" x2="558" y2="40" class="edge flow" marker-end="url(#ar4)"/>
+      <line x1="240" y1="82" x2="558" y2="82" class="edge flow" marker-end="url(#ar4)"/>
+      <line x1="240" y1="86" x2="558" y2="124" class="edge flow" marker-end="url(#ar4)"/>
+      <text x="410" y="92" class="elabel">competesWith</text>
+    </svg>
+
+    <h3 class="reveal">④ How the agent answers — fetching across many objects at once</h3>
+    <p class="diagram-note reveal">This is the key part. When you ask about a <b>company</b> or <b>scenario</b>, the agent
+      does <b>not</b> read one giant table. It works out <i>which objects</i> hold a slice of the answer, asks each
+      one, the resolver turns every ask into real SQL over the right raw file(s), and then it <b>fuses</b> the
+      numbers and the narrative into a single cited answer.</p>
+    <svg class="flow-svg diagram-block reveal" viewBox="0 0 980 480" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Agent fan-out: a question is planned into queries across Brand, PricePoint, Product, Attribute and Narrative, each resolved to its raw table, then fused into an answer">
+      <defs><marker id="ar5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M1 1 L8 5 L1 9" fill="none" stroke="#5a6b82" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+      <g class="fb on"><rect x="240" y="10" width="500" height="48" rx="10"/>
+        <text x="490" y="39" class="ft" style="font-size:14px">“How is Bisleri positioned vs its peers?”</text></g>
+      <line x1="490" y1="58" x2="490" y2="86" class="edge flow" marker-end="url(#ar5)"/>
+      <g class="fb"><rect x="320" y="86" width="340" height="40" rx="9"/>
+        <text x="490" y="111" class="fp" style="text-anchor:middle">Agent plans which objects to ask</text></g>
+
+      <!-- fan-out to 5 object queries -->
+      <line x1="490" y1="126" x2="100" y2="168" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="490" y1="126" x2="292" y2="168" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="490" y1="126" x2="484" y2="168" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="490" y1="126" x2="676" y2="168" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="490" y1="126" x2="868" y2="168" class="edge flow" marker-end="url(#ar5)"/>
+
+      <g class="fb"><rect x="8" y="170" width="184" height="118" rx="10"/>
+        <text x="100" y="194" class="ft" style="font-size:13px">Brand</text>
+        <text x="100" y="216" class="fs">share, gross margin</text>
+        <text x="100" y="252" class="fm">resolver → SQL</text><text x="100" y="270" class="fm">→ t_financials</text></g>
+      <g class="fb"><rect x="200" y="170" width="184" height="118" rx="10"/>
+        <text x="292" y="194" class="ft" style="font-size:13px">PricePoint</text>
+        <text x="292" y="216" class="fs">price by channel</text>
+        <text x="292" y="252" class="fm">resolver → SQL</text><text x="292" y="270" class="fm">→ t_prices</text></g>
+      <g class="fb"><rect x="392" y="170" width="184" height="118" rx="10"/>
+        <text x="484" y="194" class="ft" style="font-size:13px">Product</text>
+        <text x="484" y="216" class="fs">TDS, certifications</text>
+        <text x="484" y="252" class="fm">resolver → SQL</text><text x="484" y="270" class="fm">→ t_specs</text></g>
+      <g class="fb"><rect x="584" y="170" width="184" height="118" rx="10"/>
+        <text x="676" y="194" class="ft" style="font-size:13px">Attribute</text>
+        <text x="676" y="216" class="fs">purity / trust score</text>
+        <text x="676" y="252" class="fm">resolver → SQL</text><text x="676" y="270" class="fm">→ t_attributes</text></g>
+      <g class="fb on"><rect x="776" y="170" width="196" height="118" rx="10"/>
+        <text x="874" y="194" class="ft" style="font-size:13px">Narrative</text>
+        <text x="874" y="216" class="fs">stated strategy</text>
+        <text x="874" y="252" class="fm">FTS search</text><text x="874" y="270" class="fm">→ narrative store</text></g>
+
+      <!-- converge to fuse -->
+      <line x1="100" y1="288" x2="490" y2="348" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="292" y1="288" x2="490" y2="348" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="484" y1="288" x2="490" y2="348" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="676" y1="288" x2="490" y2="348" class="edge flow" marker-end="url(#ar5)"/>
+      <line x1="874" y1="288" x2="490" y2="348" class="edge flow" marker-end="url(#ar5)"/>
+      <text x="700" y="330" class="elabel">joined on shared keys (brand · sku) + links</text>
+
+      <g class="fb on"><rect x="300" y="350" width="380" height="46" rx="10"/>
+        <text x="490" y="378" class="fp" style="text-anchor:middle">Fuse + reason — numbers + narrative</text></g>
+      <line x1="490" y1="396" x2="490" y2="420" class="edge flow" marker-end="url(#ar5)"/>
+      <g class="fb"><rect x="70" y="420" width="840" height="50" rx="10"/>
+        <text x="490" y="450" class="fs" style="font-size:12.5px; fill:#cdd7e3">“Bisleri leads at ~32% share and ~45% margin, premiumising via mineral SKUs (its stated strategy) — but undercut on the 1L pack by Kinley &amp; Aquafina.”</text></g>
+    </svg>
+    <p class="diagram-note reveal"><b>Step by step:</b> ① the agent reads the question and decides which objects hold a
+      slice of it. ② it asks each object only what it can answer. ③ the resolver turns every ask into real SQL over
+      the right raw file, joining <i>across</i> objects on shared keys (<code>brand</code>, <code>sku</code>) and the
+      links. ④ clean rows + retrieved narrative come back, and the agent fuses them into one cited answer.
+      The same machinery runs for <b>any</b> company or scenario — only the set of objects asked changes.</p>
+
+    <p class="diagram-note reveal">↑ That's exactly what the <b>narrated walkthrough at the top of this page</b> shows in
+      motion — the question fanning out to each object, the pointers fetching from raw, and the answer fusing
+      together. None of it is pre-stored; it's the path <i>every</i> question takes, every time.</p>
+
+    <div class="callout">
+      <b>The punchline:</b> the database stays stable on purpose. A new, differently-shaped file doesn't change the
+      concepts — it just adds a few pointers underneath them. Real Python + SQLite; the SQL you'll see on the Agent
+      tab is generated from the bindings and actually run. Nothing here is faked.
+    </div>
+
+    <div class="sec-break"><span>Questions people ask</span></div>
+
+    <h3 class="reveal">FAQ <span class="muted">— click any question</span></h3>
+    <div class="faq reveal">
+
+      <div class="faq-item">
+        <button class="faq-q">If I query for any data, how do you handle the runtime — won't fetching it live be slow?</button>
+        <div class="faq-a"><p>Two reasons it stays fast. <b>One:</b> every question only touches the few facts it
+          needs — like grabbing two books, not reading the whole library. <b>Two:</b> for questions people ask
+          often, we prepare the answer <b>in advance</b> and refresh it only when the underlying data changes — so
+          it comes back instantly. Only rare, brand-new questions do any live work, and even that is a small, indexed
+          lookup — not a scan of everything. In practice the slowest part is usually the AI <i>thinking</i>, not the
+          data fetch — and that's cached and tunable too.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Suppose we implement this inside AmploFly4.0 — how do we handle runtime at real scale?</button>
+        <div class="faq-a"><p>Exactly the same way, with three switches flipped. <b>One:</b> swap the small demo
+          database for a production one built for scale. <b>Two:</b> pre-compute and cache the common answers in the
+          background — on a schedule, or the moment data updates — so users get instant results. <b>Three:</b> run
+          heavy, one-off calculations on bigger compute behind the scenes, not while the user waits. The data model
+          itself <b>doesn't change</b> — only the engine underneath it gets bigger. So scaling is a known,
+          well-trodden path, not a redesign.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Where does my data actually live? Are you copying it?</button>
+        <div class="faq-a"><p>Your files stay where they are — we never make a second copy. The model is just a
+          <b>map</b> that points at your data and explains what it means. If someone corrects a value, we store only
+          that one correction as an audited note on top; the original is never touched.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">What happens when we add a new kind of data, or a new client?</button>
+        <div class="faq-a"><p>Nothing breaks. A new file simply adds a few new pointers under the concepts that
+          already exist. The same platform serves a new client — or a whole new industry — by pointing at different
+          data. We don't rebuild the system each time.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Can we trust the numbers, or is the AI making them up?</button>
+        <div class="faq-a"><p>The AI never invents numbers. It only decides <i>which</i> facts to fetch and how to
+          phrase the answer. The actual values come straight from your data through a fixed, auditable rule — and
+          every figure can be traced back to the exact file and cell it came from.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How is this different from a normal database or spreadsheet?</button>
+        <div class="faq-a"><p>A spreadsheet holds values in fixed cells; ask a new kind of question and you rebuild
+          it. This holds <b>meaning and relationships</b>, so you can ask open-ended questions across many sources at
+          once — and it explains its answer with sources. It's the difference between a filing cabinet and a
+          knowledgeable assistant who knows where everything is.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">What kinds of files can it take in?</button>
+        <div class="faq-a"><p>Almost anything — spreadsheets, CSVs, PDFs, JSON exports, even free-form written
+          reports. The AI reads the file, proposes how each part maps onto the model, and a person approves it. No
+          new file format needs custom code.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">What if two files disagree, or repeat the same fact?</button>
+        <div class="faq-a"><p>Both are kept — we never overwrite a source. The model points at each one, and
+          governance <b>flags the conflict</b> for a person to resolve. You always know which file a number came
+          from, so disagreements are visible, not hidden.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How do you handle different units — crore vs millions, ₹ vs $?</button>
+        <div class="faq-a"><p>Every pointer carries a small conversion rule, so values are <b>normalised on the way
+          out</b> and everything becomes comparable. Where a currency or scale is ambiguous, it's flagged for a human
+          to confirm rather than guessed.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Who can see what? Is sensitive data protected?</button>
+        <div class="faq-a"><p>Yes. Access is role-based: sensitive fields like revenue or margins are <b>hidden from
+          viewers</b>, changes need approval, and every action is logged. Different teams or clients can be walled
+          off from each other while sharing the same model.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">What happens if the answer isn't in the data?</button>
+        <div class="faq-a"><p>It says so, plainly, instead of inventing one. Answers are grounded in what was actually
+          retrieved and come <b>with their sources</b> — so "we don't have that" is a valid, honest answer.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How long does it take to onboard a new client or domain?</button>
+        <div class="faq-a"><p>Usually days, not a rebuild. You point the model at the new files, the AI proposes the
+          mapping, a person approves it, and it's queryable. The platform doesn't change — only the data it points
+          at does.</p></div>
+      </div>
+
+    </div>
+
+    <div class="sec-break"><span>Compared to the other approaches</span></div>
+
+    <h3 class="reveal">How it relates to the two proposals <span class="muted">— RAG vs routing tables</span></h3>
+    <div class="faq reveal">
+
+      <div class="faq-item">
+        <button class="faq-q">How is this different from plain RAG — just embedding everything as text?</button>
+        <div class="faq-a"><p>Pure RAG turns every document into text and finds answers by <i>similarity</i>. That's
+          great for narrative, but <b>weak at exact numbers</b>, can't really add things up, gets noisier as more
+          domains are mixed in, and it's hard to audit <i>why</i> an answer appeared. This model uses
+          <b>real, validated queries for the numbers</b> and keeps text-search only for the words — so you get
+          precise figures <i>and</i> the narrative, without the noise.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Isn't this just the "routing table + domain tables" approach from the proposal?</button>
+        <div class="faq-a"><p>Yes — it's that approach, generalised and made visual. The <b>ontology is the routing
+          registry</b>: each question is routed to the right objects, answered with validated read-only SQL on an
+          approved set of tables, with narrative search scoped alongside. It's the recommended Proposal 2, the same
+          pattern already live for ESG and PEL — just presented as one clean model.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Is the agent running arbitrary SQL? How is that safe?</button>
+        <div class="faq-a"><p>No. The agent never writes free-form SQL. The system generates <b>read-only (SELECT)
+          queries</b> against an approved <b>allow-list</b> of tables — no edits, no deletes — and every read is
+          validated and logged. The AI decides <i>what</i> to ask; it doesn't get raw access to the database.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How do you get exact numbers instead of similarity guesses?</button>
+        <div class="faq-a"><p>Numbers come from <b>querying the actual data</b>, not from matching the closest-looking
+          passage. Similarity search is used only to find relevant <i>words</i> — never to produce a figure. So a
+          benchmark or a total is computed from the real values, every time.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Why not just put everything in one big vector store?</button>
+        <div class="faq-a"><p>One big vector store blurs domains together and <b>degrades as you add more</b>, can't do
+          exact math, and makes "why this answer" hard to trace. Keeping facts in a queryable model and using search
+          only for text gives precision that <b>holds up as the domains grow</b>.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How do we add a new domain or industry?</button>
+        <div class="faq-a"><p>Mostly <b>data, not code</b>: register the new domain's objects and pointers and it's
+          live. The same safety guardrails (read-only + allow-list) and the existing test suite apply to it
+          automatically — so a new domain inherits the protections for free.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How is this different from Palantir Foundry?</button>
+        <div class="faq-a"><p>Same core idea — a governed map of meaning over messy data that an AI can reason on.
+          The difference is it's <b>ours</b>, built for our use cases, far faster and cheaper to stand up than a
+          full Foundry deployment, and ours to extend.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RAW -->
+  <section id="raw" class="panel">
+    <h2>Raw layer — the files, stored as-is</h2>
+    <p class="muted">Different sources, different shapes, messy values. We change nothing about them.
+      Staging tables (<code>stg_…</code>) appear here after you ingest a file on tab 4.</p>
+    <div id="raw-tables" class="stack"></div>
+    <div id="raw-tail"></div>
+  </section>
+
+  <!-- ONTOLOGY -->
+  <section id="ontology" class="panel">
+    <h2>The meaning layer</h2>
+    <p class="muted">Three metadata tables — and not one byte of business data. The registry says what exists,
+      the bindings say where each property reads from and how to clean it, the links say how records connect.</p>
+    <h3>Registry — what exists</h3>
+    <div id="onto-registry" class="obj-grid"></div>
+    <h3>Bindings — where each property comes from <span class="muted">(the pointers)</span></h3>
+    <div id="onto-bindings"></div>
+    <h3>Links</h3>
+    <div id="onto-edges" class="edges"></div>
+  </section>
+
+  <!-- GOVERNANCE -->
+  <section id="governance" class="panel">
+    <h2>Governance — health, lineage & readiness</h2>
+    <p class="muted">The Foundry-defining layer: don't just store the data — <b>govern</b> it. Score how complete
+      the model is against the PEL spec, run health checks over every value, and trace any number back through
+      its conversion and transform to the exact raw cell and source document it came from.</p>
+
+    <h3>Readiness by PEL level <span class="muted">— what the spec calls the readiness assessment</span></h3>
+    <div id="readiness" class="card" style="padding:14px 18px"></div>
+
+    <h3>Data health <span class="muted">— validation over the unified model</span></h3>
+    <div id="health-summary" class="health-summary"></div>
+    <div id="health-checks"></div>
+
+    <h3>Lineage explorer <span class="muted">— value → conversion → transform → raw cell → source</span></h3>
+    <div class="lineage-pick">
+      <select id="lin-obj"></select>
+      <select id="lin-prop"></select>
+    </div>
+    <div id="lineage-view"></div>
+  </section>
+
+  <!-- DOCUMENTS -->
+  <section id="documents" class="panel">
+    <h2>Document repository — everything ingested since inception</h2>
+    <p class="muted">A permanent record of every source the platform has ever ingested — seed datasets and
+      runtime uploads alike. It survives a <b>Reset demo</b> (the operational model rebuilds; the document
+      history does not). Each row shows what the file became: which objects it fed, how many pointer rows,
+      and any narrative captured.</p>
+
+    <h3>Entity search <span class="muted">— type a company; see it across documents, objects, properties &amp; projects</span></h3>
+    <div class="narr-search">
+      <input id="ent-q" type="text" placeholder="A company you've ingested data on — e.g. Reliance, Apple, Bisleri, Sun Pharma…" autocomplete="off">
+      <button id="ent-btn" class="btn btn-primary">Search</button>
+    </div>
+    <div id="entity-results"></div>
+
+    <h3>All documents</h3>
+    <div id="documents-table"></div>
+
+    <h3>Narrative store <span class="muted">— the qualitative “information” layer</span></h3>
+    <p class="muted">Strategy notes, market commentary, leadership views and any unmapped free text — stored
+      with the entity each chunk is about, and full-text searchable. The agent retrieves from here and fuses
+      it with the structured numbers.</p>
+    <div class="narr-search">
+      <input id="narr-q" type="text" placeholder="Search the narrative store (e.g. premiumise, quick commerce, margin)…" autocomplete="off">
+      <button id="narr-btn" class="btn btn-primary">Search</button>
+    </div>
+    <div id="narrative-list"></div>
+  </section>
+
+  <!-- INGEST -->
+  <section id="ingest" class="panel">
+    <h2>Data ingestion — land → profile → propose → confirm → commit</h2>
+    <div id="ingest-stats" class="stat-row"></div>
+    <p class="muted">Drop <b>any</b> file — CSV, Excel, JSON, PDF, Word, or an unstructured note. Spreadsheets
+      parse locally; PDFs and prose are read by Claude into rows. Then the LLM maps every column to the
+      full PEL spec (all 6 levels) — and proposes <b>new</b> objects/properties when something doesn't fit.</p>
+
+    <div class="proj-grid">
+      <div>
+        <label for="company-input">Company / entity <span class="muted">(optional)</span></label>
+        <input id="company-input" type="text" placeholder="e.g. Reliance, MSPL, Apple" autocomplete="off">
+      </div>
+      <div>
+        <label for="project-input">Project <span class="muted">(optional)</span></label>
+        <input id="project-input" type="text" placeholder="e.g. BRSR FY26 — MSPL, or Index Coverage" autocomplete="off">
+      </div>
+    </div>
+    <p class="muted" style="margin:-6px 0 14px;font-size:12px">Tagging a file with a company or project makes it findable by that company/project in Entity search.</p>
+    <div id="dropzone" class="dropzone">
+      <div class="dz-inner">
+        <div class="dz-icon">⤓</div>
+        <div><b>Drop a file here</b> or <label class="dz-link">browse<input type="file" id="file-input" hidden></label></div>
+        <div class="muted dz-sub">.csv · .xlsx · .json · .pdf · .docx · .txt — any domain, any sub-domain</div>
+      </div>
+    </div>
+
+    <h3>…or try a bundled sample</h3>
+    <div id="incoming-files" class="file-cards"></div>
+    <div id="ingest-plan"></div>
+  </section>
+
+  <!-- AGENT -->
+  <section id="agent" class="panel">
+    <h2>Ask the agent</h2>
+    <p class="muted">The agent speaks objects, never raw tables. Watch a question become an object query,
+      then real SQL, then a cited answer.</p>
+    <div id="suggested" class="chips question-chips"></div>
+    <div class="ask-row">
+      <input id="question" type="text" placeholder="Ask about Bisleri vs competitors…" autocomplete="off">
+      <label id="llm-toggle-wrap" class="llm-toggle hidden">
+        <input type="checkbox" id="use-llm"> use Claude
+      </label>
+      <button id="ask-btn" class="btn btn-primary">Ask</button>
+    </div>
+    <div id="agent-result"></div>
+  </section>
+
+  <!-- CONSOLE (operations / governance control plane) -->
+  <section id="console" class="panel">
+    <h2>Operations console</h2>
+    <p class="muted">The control plane: who you are (role), which branch &amp; workspace you're in, what's pending
+      approval, how data is classified, and the full audit trail. Switch <b>role / branch / workspace</b> in the
+      top bar — the whole platform responds (a Viewer can't see confidential columns or edit; an Analyst's uploads
+      need a Steward's approval; a branch isolates restatements until merged).</p>
+    <div id="console-ctx"></div>
+    <h3>Pending approvals <span class="muted">— proposed bindings awaiting a Data Steward</span></h3>
+    <div id="console-pending"></div>
+    <h3>Branches</h3>
+    <div id="console-branches"></div>
+    <h3>Workspaces</h3>
+    <div id="console-workspaces"></div>
+    <h3>Data classification <span class="muted">— drives property-level security</span></h3>
+    <div id="console-class"></div>
+    <h3>Audit trail</h3>
+    <div id="console-history"></div>
+  </section>
+
+  <!-- COMPANIES -->
+  <section id="companies" class="panel">
+    <h2>Companies tracked</h2>
+    <p class="muted">Every entity the platform holds data on — across all domains. Click a company to see it
+      everywhere: its documents, the objects &amp; properties holding its data, and the projects it appears in.</p>
+    <div class="narr-search">
+      <input id="comp-q" type="text" placeholder="Filter companies…" autocomplete="off">
+    </div>
+    <div id="companies-list"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="panel">
+    <h2>Projects</h2>
+    <p class="muted">Every project files were ingested under (named at upload, or seeded). Click a project to
+      drill into the documents and objects it contains.</p>
+    <div id="projects-list"></div>
+  </section>
+</main>
+</div>
+
+<div id="drawer" class="drawer hidden">
+  <div class="drawer-head">
+    <span id="drawer-title"></span>
+    <button id="drawer-close" class="btn btn-ghost">✕ Close</button>
+  </div>
+  <div id="drawer-body"></div>
+</div>
+<div id="drawer-scrim" class="hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
