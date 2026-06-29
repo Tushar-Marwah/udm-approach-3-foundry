@@ -1,6 +1,7 @@
 services:
+  # URL becomes https://<name>.onrender.com  — change `name` to rename the link
   - type: web
-    name: amplofly-udm
+    name: unified-model-approach-3-foundry
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
